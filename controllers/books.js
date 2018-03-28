@@ -10,7 +10,6 @@ module.exports = {
     })
   },
   create: function(req, res) {
-    console.log(req.body);
     var book = new Book({
       isbn: req.body.isbn,
       title: req.body.title,
@@ -26,15 +25,15 @@ module.exports = {
     });
   },
   update: function(req, res) {
-    let updataData = {}
+    let updateData = {}
     if (req.body.isbn) {updateData.isbn = req.body.isbn}
     if (req.body.title) {updateData.title = req.body.title}
     if (req.body.author) {updateData.author = req.body.author}
     if (req.body.category) {updateData.category = req.body.category}
     if (req.body.stock) {updateData.stock = Number(req.body.stock)}
 
-    Book.update({ _id: req.id }, {
-      $set: req.body
+    Book.update({ _id: req.params.id }, {
+      $set: updateData
     }, function(err, result) {
       if (err) {
         res.status(500).send({err: err})
@@ -43,7 +42,7 @@ module.exports = {
     });
   },
   delete: function(req, res) {
-    Book.remove({ _id: req.id }, function (err, result) {
+    Book.remove({ _id: req.params.id }, function (err, result) {
       if (err) {
         res.status(500).send({err: err})
       }
