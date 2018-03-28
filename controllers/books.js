@@ -5,8 +5,9 @@ module.exports = {
     Book.find(function (err, books) {
       if (err) {
         res.status(500).send({err: err})
+      } else {
+        res.status(200).send(books)
       }
-      res.status(200).send(books)
     })
   },
   create: function(req, res) {
@@ -20,8 +21,9 @@ module.exports = {
     book.save(function (err, result) {
       if (err) {
         res.status(500).send({err: err})
+      } else {
+        res.status(200).send(result)
       }
-      res.status(200).send(result)
     });
   },
   update: function(req, res) {
@@ -37,16 +39,18 @@ module.exports = {
     }, function(err, result) {
       if (err) {
         res.status(500).send({err: err})
+      } else {
+        res.status(200).send(result)
       }
-      res.status(200).send(result)
     });
   },
   delete: function(req, res) {
     Book.remove({ _id: req.params.id }, function (err, result) {
       if (err) {
         res.status(500).send({err: err})
+      } else {
+        res.status(200).send(result)
       }
-      res.status(200).send(result)
     });
   }
 }

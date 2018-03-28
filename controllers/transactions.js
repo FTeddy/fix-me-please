@@ -4,38 +4,46 @@ module.exports = {
   all: function(req, res) {
     Transaction.find(function (err, transactions) {
       if (err) {
-        res.send({err: err})
+        return res.status(500).send({err: err})
       }
-      res.send(transactions)
+      res.status(200).send(transactions)
     })
   },
   create: function(req, res) {
-    var transaction = new Transaction(req.body);
+    var transaction = new Transaction({
+      memberid: req.body.memberid,
+      days: Number(req.body.days),
+      price: Number(req.body.price)
+    });
+    transaction.booklist.push(req.params.bookId)
     transaction.save(function (err, result) {
       if (err) {
-        res.send({err: err})
+        return res.status(500).send({err: err})
       } else {
-        res.send(result)
+        res.status(200).send(result)
       }
-      res.send(result)
     });
   },
   update: function(req, res) {
-    Transaction.update({ _id: req.id }, {
-      $set: req.body
+    let updateData = {}
+    if (req.body.memberid) {updateData.memberid = req.body.memberid}
+    if (req.body.days) {updateData.days = Number(req.body.days)}
+    if (req.body.price) {updateData.price = Number(req.body.price)}
+    Transaction.update({ _id: req.params.id }, {
+      $set: updateData
     }, function(err, result) {
       if (err) {
-        res.send({err: err})
+        return res.status(500).send({err: err})
       }
-      res.send(result)
+      res.status(200).send(result)
     });
   },
   delete: function(req, res) {
-    Transaction.remove({ _id: req.id }, function (err, result) {
+    Transaction.remove({ _id: req.params.id }, function (err, result) {
       if (err) {
-        res.send({err: err})
+        return res.status(500).send({err: err})
       }
-      res.send(result)
+      res.status(200).send(result)
     })
   }
 }
